@@ -1,5 +1,7 @@
 var canvas = document.getElementById('screen');
 var context = canvas.getContext('2d');
+canvas.addEventListener("touchstart", doTouchStart, false);
+canvas.addEventListener("touchend", doTouchEnd, false);
 
 var miniconsole = {};
 miniconsole.paused = false;
@@ -30,6 +32,21 @@ miniconsole.input.KEY_LEFT = 37;
 miniconsole.input.KEY_RIGHT = 39;
 miniconsole.input.KEY_UP = 38;
 miniconsole.input.KEY_DOWN = 40;
+miniconsole.input.touch_x = -1;
+miniconsole.input.touch_y = -1;
+
+function doTouchStart( event ){
+	event.preventDefault();
+	miniconsole.input.touch_x = event.targetTouches[0].pageX;
+	miniconsole.input.touch_y = event.targetTouches[0].pageY;
+}
+function doTouchEnd( event ){
+	event.preventDefault();
+	miniconsole.input.touch_x = -1;
+	miniconsole.input.touch_y = -1;
+}
+
+
 document.onkeydown =  function( event ){
 	event = event || window.event;
 	
@@ -103,4 +120,7 @@ miniconsole.video.plot = function( x, y, intensity ){
 
 miniconsole.input.iskeydown = function( key ){
 	return ( miniconsole.input.actual_key_down == key );
+};
+miniconsole.input.istouch = function( x, y, w, h ){
+	return ( miniconsole.input.touch_x >= x * miniconsole.video.cell_w && miniconsole.input.touch_x <= ( x+w )*miniconsole.video.cell_w ) && ( miniconsole.input.touch_y >= y*miniconsole.video.cell_h && miniconsole.input.touch_y <= ( y+h )*miniconsole.video.cell_h );
 };
