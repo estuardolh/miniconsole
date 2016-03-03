@@ -146,6 +146,25 @@ miniconsole.video.plot = function( x, y, intensity ){
 	context.stroke();
 };
 
+miniconsole.video.set_it = function( x, y, it ){
+	var width = ( typeof it[0].length === 'undefined' ) ? 1 : it[0].length;
+	var height = ( typeof it.length === 'undefined' ) ? 0 : it.length;
+	
+	var column = [];
+	var key;
+	var i = 0
+	, j =0;
+	for( ; j < height ; j ++ ){
+		column = it[j];
+		for( i = 0 ; i < width ; i ++ ){
+			key = column[i];
+			if( key != null ) miniconsole.video.plot( (x-1)+i, (y-1)+j, key );
+		}
+	}
+	
+	
+};
+
 miniconsole.input.iskeydown = function( key ){
 	return ( miniconsole.input.actual_key_down == key );
 };
