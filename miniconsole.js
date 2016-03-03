@@ -121,10 +121,10 @@ miniconsole.main_loop = function(){
 miniconsole.interval = setInterval( miniconsole.main_loop , miniconsole.fps );
 
 miniconsole.setFPS = function( fps ){
-	miniconsole.fps = fps;
+	miniconsole.fps = ( fps <= 0 )? 1000/60 : fps;
 	
 	clearInterval( miniconsole.interval );
-	miniconsole.interval = setInterval( miniconsole.main_loop, miniconsole.fps );
+	miniconsole.interval = setInterval( miniconsole.main_loop, 1000 / miniconsole.fps );
 }
 
 miniconsole.show = function( act ){
@@ -146,7 +146,7 @@ miniconsole.video.plot = function( x, y, intensity ){
 	context.stroke();
 };
 
-miniconsole.video.set_it = function( x, y, it ){
+miniconsole.video.set = function( x, y, it ){
 	var width = ( typeof it[0].length === 'undefined' ) ? 1 : it[0].length;
 	var height = ( typeof it.length === 'undefined' ) ? 0 : it.length;
 	
@@ -161,8 +161,6 @@ miniconsole.video.set_it = function( x, y, it ){
 			if( key != null ) miniconsole.video.plot( (x-1)+i, (y-1)+j, key );
 		}
 	}
-	
-	
 };
 
 miniconsole.input.iskeydown = function( key ){

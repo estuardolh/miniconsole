@@ -14,9 +14,45 @@ void miniconsole.setFPS( fps );
 
 examples:
 
-drawing an array:
+Inicializing
 ```javascript
-miniconsole.video.set_it( 0, 0,
+// amount of cells in width & height
+miniconsole.video.w = 16;
+miniconsole.video.h = 16;
+
+// cells width & height
+miniconsole.video.cell_w = 16;
+miniconsole.video.cell_h = 16;
+
+// 60 photos por second
+miniconsole.setFPS( 60 );
+
+// on load, start!
+window.onload = function(){
+	miniconsole.show( new MyGame() );
+};
+```
+
+A game function
+```javascript
+function MyGame(){
+	var a_game = {};
+	
+	a_game.update = function(){
+		// TO DO update logic here
+	};
+	
+	a_game.draw = function(){
+		// TO DO draw logic here
+	};
+	
+	return a_game;
+}
+```
+
+Drawing an array:
+```javascript
+miniconsole.video.set( 0, 0,
 [
   [0,2,0],
   [2,2,2],
