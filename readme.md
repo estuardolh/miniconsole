@@ -5,7 +5,7 @@ doc:
 void miniconsole.draw();
 void miniconsole.update();
 void miniconsole.video.plot(x, y, intensity );
-void miniconsole.video.set_it(x, y, it );
+void miniconsole.video.set(x, y, it );
 boolean miniconsole.input.iskeydown( key_name );
 boolean miniconsole.input.istouch( x, y, w, h );
 boolean miniconsole.input.click( x, y, w, h );
