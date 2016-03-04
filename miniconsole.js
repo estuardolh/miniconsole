@@ -113,7 +113,7 @@ miniconsole.update = function(){
 	if( !miniconsole.paused ) miniconsole.act.update();
 };
 
-miniconsole.fps = 1000/60;
+miniconsole.fps = 1;
 miniconsole.main_loop = function(){
 	miniconsole.update();
 	miniconsole.draw();
@@ -121,7 +121,7 @@ miniconsole.main_loop = function(){
 miniconsole.interval = setInterval( miniconsole.main_loop , miniconsole.fps );
 
 miniconsole.setFPS = function( fps ){
-	miniconsole.fps = ( fps <= 0 )? 1000/60 : fps;
+	miniconsole.fps = ( fps <= 0 )? 1 : fps;
 	
 	clearInterval( miniconsole.interval );
 	miniconsole.interval = setInterval( miniconsole.main_loop, 1000 / miniconsole.fps );
@@ -132,13 +132,24 @@ miniconsole.show = function( act ){
 	miniconsole.paused = false;
 };
 
+miniconsole.video.set = function( x, y, arg ){
+	if( typeof it === 'number' ){
+		miniconsole.video.plot(x, y, arg);
+	}else /*should be 'object' but, whatever*/ {
+		miniconsole.video.draw_struct(x, y, arg);
+	}
+};
+
 miniconsole.video.plot = function( x, y, intensity ){
 	var percent = 8;
 	var cell_w_percent = miniconsole.video.cell_w * percent/100;
 	var cell_h_percent = miniconsole.video.cell_h * percent/100;
 	
 	context.beginPath();
-	context.rect( x * miniconsole.video.cell_w + cell_w_percent , y * miniconsole.video.cell_h + cell_h_percent, miniconsole.video.cell_w - 2 * cell_w_percent, miniconsole.video.cell_h - 2 * cell_h_percent );
+	context.rect( x * miniconsole.video.cell_w + cell_w_percent 
+		, y * miniconsole.video.cell_h + cell_h_percent
+		, miniconsole.video.cell_w - 2 * cell_w_percent
+		, miniconsole.video.cell_h - 2 * cell_h_percent );
 	context.lineWidth = 1;
 	context.fillStyle = (intensity == 0)?'#F8F8F8':(intensity == 1)? '#AAAAAA': '#333333';
 	context.fill();
@@ -146,19 +157,35 @@ miniconsole.video.plot = function( x, y, intensity ){
 	context.stroke();
 };
 
-miniconsole.video.set = function( x, y, it ){
-	var width = ( typeof it[0].length === 'undefined' ) ? 1 : it[0].length;
+miniconsole.video.draw_struct = function( x, y, it ){
+	var width = ( typeof it[0].length === 'undefined' ) ? 0 /* 1D array */ : it[0].length /* 2D array */ ;
 	var height = ( typeof it.length === 'undefined' ) ? 0 : it.length;
 	
 	var column = [];
 	var key;
 	var i = 0
 	, j =0;
-	for( ; j < height ; j ++ ){
-		column = it[j];
-		for( i = 0 ; i < width ; i ++ ){
-			key = column[i];
-			if( key != null ) miniconsole.video.plot( (x-1)+i, (y-1)+j, key );
+	
+	if( width != 0 ){
+		/*
+			[[], [], ... , []]
+		*/
+		for( ; j < height ; j++ ){
+			column = it[j];
+			
+			for( i = 0 ; i < width ; i ++ ){
+				key = column[i];
+				if( key != null ) miniconsole.video.plot( x+i, y+j, key );
+			}
+		}
+	}else{
+		/*
+			[0, 1, ... , 2]
+		*/
+		for( ; j < height ; j++ ){
+			key = it[j];
+			
+			if( key != null ) miniconsole.video.plot( x+j, y, key );
 		}
 	}
 };

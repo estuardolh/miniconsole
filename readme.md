@@ -4,8 +4,7 @@ doc:
 ```javascript
 void miniconsole.draw();
 void miniconsole.update();
-void miniconsole.video.plot(x, y, intensity );
-void miniconsole.video.set(x, y, it );
+void miniconsole.video.set(x, y, array );
 boolean miniconsole.input.iskeydown( key_name );
 boolean miniconsole.input.istouch( x, y, w, h );
 boolean miniconsole.input.click( x, y, w, h );
@@ -33,7 +32,7 @@ window.onload = function(){
 };
 ```
 
-A game function
+A game function struct
 ```javascript
 function MyGame(){
 	var a_game = {};
@@ -50,7 +49,13 @@ function MyGame(){
 }
 ```
 
-Drawing an array:
+Drawing a simple array:
+```javascript
+miniconsole.video.set( 0, 0, [1, 0, 2] );
+```
+![mini console5](./screenshots/miniconsole6.PNG)
+
+Drawing a double array:
 ```javascript
 miniconsole.video.set( 0, 0,
 [
