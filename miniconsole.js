@@ -83,9 +83,7 @@ miniconsole.draw = function(){
 	if( !miniconsole.paused ){
 		// background, white cells
 		miniconsole.matrix.forEach( function( column ){
-			column.forEach( function( cell ){
-					// miniconsole.video.plot( cell.x, cell.y, cell.value );
-					
+			column.forEach( function( cell ){					
 					var percent = 8;
 					var cell_w_percent = miniconsole.video.cell_w * percent/100;
 					var cell_h_percent = miniconsole.video.cell_h * percent/100;
@@ -100,7 +98,6 @@ miniconsole.draw = function(){
 					context.fill();
 					context.strokeStyle = '#D8D8D8';
 					context.stroke();
-					
 				}
 			);
 		});
@@ -154,6 +151,19 @@ miniconsole.show = function( act ){
 	miniconsole.paused = false;
 };
 
+miniconsole.video.get = function( x, y ){
+	if( x >= miniconsole.video.w ){
+		console.log("WARNING: x="+x+" outs of matrix width");
+		return -1;
+	}
+	if( y >= miniconsole.video.h ){
+		console.log("WARNING: y="+y+" outs of matrix height");
+		return -1;
+	}
+	
+	return (miniconsole.matrix[ x ])[ y ].value;
+}
+
 miniconsole.video.set = function( x, y, arg ){
 	if( typeof it === 'number' ){
 		miniconsole.video.plot(x, y, arg);
@@ -163,10 +173,20 @@ miniconsole.video.set = function( x, y, arg ){
 };
 
 miniconsole.video.plot = function( x, y, intensity ){
-	// set bin
 	var column = [];
-	column = miniconsole.matrix[ x ];
-	column[ y ] = {"x": x, "y": y, value: intensity};
+	
+	if( x < miniconsole.video.w ){
+		column = miniconsole.matrix[ x ];
+		if( y < miniconsole.video.h ){
+			column[ y ] = {"x": x, "y": y, "value": intensity};
+		}else{
+			console.log( "WARNING: position y="+x+" outs of matrix height="+miniconsole.video.h );
+		}
+	}else{
+		console.log( "WARNING: position x="+x+" outs of matrix width="+miniconsole.video.w );
+	}
+	
+	
 };
 
 miniconsole.video.draw_struct = function( x, y, it ){
