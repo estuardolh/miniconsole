@@ -12,8 +12,6 @@ miniconsole.act = null;
 miniconsole.ini = true;
 
 miniconsole.matrix = [];
-miniconsole.matrix_w = 10;
-miniconsole.matrix_h = 10;
 miniconsole.cell_w = 10;
 miniconsole.cell_h = 10;
 
@@ -83,12 +81,30 @@ miniconsole.draw = function(){
 	}
 
 	if( !miniconsole.paused ){
+		// background, white cells
 		miniconsole.matrix.forEach( function( column ){
 			column.forEach( function( cell ){
-					miniconsole.video.plot( cell.x, cell.y, 0 );
+					// miniconsole.video.plot( cell.x, cell.y, cell.value );
+					
+					var percent = 8;
+					var cell_w_percent = miniconsole.video.cell_w * percent/100;
+					var cell_h_percent = miniconsole.video.cell_h * percent/100;
+					
+					context.beginPath();
+					context.rect( cell.x * miniconsole.video.cell_w + cell_w_percent 
+						, cell.y * miniconsole.video.cell_h + cell_h_percent
+						, miniconsole.video.cell_w - 2 * cell_w_percent
+						, miniconsole.video.cell_h - 2 * cell_h_percent );
+					context.lineWidth = 1;
+					context.fillStyle = (cell.value == 0)?'#F8F8F8':(cell.value == 1)? '#AAAAAA': '#333333';
+					context.fill();
+					context.strokeStyle = '#D8D8D8';
+					context.stroke();
+					
 				}
 			);
 		});
+		miniconsole.clear();
 		
 		miniconsole.act.draw();
 	}
@@ -100,17 +116,23 @@ miniconsole.update = function(){
 	}
 	
 	if( miniconsole.ini ){
-		for( var i = 0; i < miniconsole.video.w; i++ ){
-			var column = [];
-			for( var j = 0; j < miniconsole.video.h; j++ ){
-				column[ j ] = { x: i, y: j, value: 0 };
-			}
-			miniconsole.matrix[ i ] = column;
-		}
-	
+		// ini background
+		miniconsole.clear();
+		
 		miniconsole.ini = false;
 	}
 	if( !miniconsole.paused ) miniconsole.act.update();
+};
+
+miniconsole.clear = function(){
+	var column;
+	for( var i = 0; i < miniconsole.video.w; i++ ){
+		column = [];
+		for( var j = 0; j < miniconsole.video.h; j++ ){
+			column[ j ] = { x: i, y: j, value: 0 };
+		}
+		miniconsole.matrix[ i ] = column;
+	}
 };
 
 miniconsole.fps = 1;
@@ -141,20 +163,10 @@ miniconsole.video.set = function( x, y, arg ){
 };
 
 miniconsole.video.plot = function( x, y, intensity ){
-	var percent = 8;
-	var cell_w_percent = miniconsole.video.cell_w * percent/100;
-	var cell_h_percent = miniconsole.video.cell_h * percent/100;
-	
-	context.beginPath();
-	context.rect( x * miniconsole.video.cell_w + cell_w_percent 
-		, y * miniconsole.video.cell_h + cell_h_percent
-		, miniconsole.video.cell_w - 2 * cell_w_percent
-		, miniconsole.video.cell_h - 2 * cell_h_percent );
-	context.lineWidth = 1;
-	context.fillStyle = (intensity == 0)?'#F8F8F8':(intensity == 1)? '#AAAAAA': '#333333';
-	context.fill();
-	context.strokeStyle = '#D8D8D8';
-	context.stroke();
+	// set bin
+	var column = [];
+	column = miniconsole.matrix[ x ];
+	column[ y ] = {"x": x, "y": y, value: intensity};
 };
 
 miniconsole.video.draw_struct = function( x, y, it ){
