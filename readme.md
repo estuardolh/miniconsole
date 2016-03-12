@@ -8,6 +8,7 @@ void miniconsole.video.set(x, y, array );
 boolean miniconsole.input.iskeydown( key_name );
 boolean miniconsole.input.istouch( x, y, w, h );
 boolean miniconsole.input.click( x, y, w, h );
+boolean miniconsole.input.click_touch( x, y, w, h );
 void miniconsole.setFPS( fps );
 ```
 
@@ -69,6 +70,5 @@ miniconsole.video.set( 0, 0,
 random outs:
 
 ![mini console1](./screenshots/miniconsole1.PNG)
-![mini console2](./screenshots/miniconsole2.PNG)
 ![mini console3](./screenshots/miniconsole3.PNG)
 ![mini console3](./screenshots/miniconsole4.PNG)
