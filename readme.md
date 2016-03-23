@@ -4,12 +4,13 @@ doc:
 ```javascript
 void miniconsole.draw();
 void miniconsole.update();
+void miniconsole.setFPS( fps );
 void miniconsole.video.set(x, y, array );
 boolean miniconsole.input.iskeydown( key_name );
-boolean miniconsole.input.istouch( x, y, w, h );
+boolean miniconsole.input.touch( x, y, w, h );
 boolean miniconsole.input.click( x, y, w, h );
 boolean miniconsole.input.click_touch( x, y, w, h );
-void miniconsole.setFPS( fps );
+array miniconsole.array.rotate( array_2D );
 ```
 
 examples:
