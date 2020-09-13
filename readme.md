@@ -15,7 +15,7 @@ array miniconsole.array.rotate( array_2D );
 
 examples:
 
-Inicializing
+Initializing
 ```javascript
 // amount of cells in width & height
 miniconsole.video.w = 16;
